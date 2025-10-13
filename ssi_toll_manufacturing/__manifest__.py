@@ -21,6 +21,7 @@
         "ssi_transaction_cancel_mixin",
         "ssi_transaction_partner_mixin",
         "ssi_mrp_production",
+        "ssi_product_line_account_mixin",
         "base",
     ],
     "data": [
