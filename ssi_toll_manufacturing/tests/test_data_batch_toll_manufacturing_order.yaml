@@ -1,0 +1,154 @@
+scenarios:
+  - name: "Batch Toll Manufacturing Order - Full Workflow draft to open"
+    steps:
+      - step: "Setup - create order type"
+        action: "create"
+        model: "toll_manufacturing_order_type"
+        save_as: "order_type"
+        values:
+          name: "Batch TMO Type WF"
+          code: "BTMOTWF"
+
+      - step: "Setup - create partner"
+        action: "create"
+        model: "res.partner"
+        save_as: "partner"
+        values:
+          name: "Test Batch TMO Partner"
+
+      - step: "Create batch toll manufacturing order"
+        action: "create"
+        model: "batch_toll_manufacturing_order"
+        save_as: "batch"
+        as_user: "base.user_admin"
+        values:
+          type_id: "EVAL: registry['order_type'].id"
+          partner_id: "EVAL: registry['partner'].id"
+
+      - step: "Assert batch created in draft"
+        action: "assert"
+        target: "batch"
+        asserts:
+          state:
+            type: "value"
+            expected: "draft"
+          amount_total:
+            type: "value"
+            expected: 0.0
+          amount_untaxed:
+            type: "value"
+            expected: 0.0
+          amount_tax:
+            type: "value"
+            expected: 0.0
+          amount_processing_fee:
+            type: "value"
+            expected: 0.0
+          amount_supplier_procured_raw_material:
+            type: "value"
+            expected: 0.0
+
+      - step: "Confirm batch"
+        action: "call"
+        target: "batch"
+        method: "action_confirm"
+        as_user: "base.user_admin"
+        asserts:
+          state:
+            type: "value"
+            expected: "confirm"
+
+      - step: "Invalidate cache after confirm"
+        action: "call"
+        target: "batch"
+        method: "invalidate_cache"
+
+      - step: "Approve batch to open"
+        action: "call"
+        target: "batch"
+        method: "action_approve_approval"
+        as_user: "base.user_admin"
+        asserts:
+          state:
+            type: "value"
+            expected: "open"
+
+  - name: "Batch Toll Manufacturing Order - With TMO Lines compute"
+    steps:
+      - step: "Setup - create order type"
+        action: "create"
+        model: "toll_manufacturing_order_type"
+        save_as: "order_type"
+        values:
+          name: "Batch TMO Compute Type"
+          code: "BTMOCOMP"
+
+      - step: "Setup - create partner"
+        action: "create"
+        model: "res.partner"
+        save_as: "partner"
+        values:
+          name: "Test Batch TMO Compute Partner"
+
+      - step: "Setup - get UoM"
+        action: "ref"
+        xml_id: "uom.product_uom_unit"
+        save_as: "uom"
+
+      - step: "Setup - create product"
+        action: "create"
+        model: "product.product"
+        save_as: "product"
+        values:
+          name: "Test Batch TMO Product"
+          type: "product"
+          uom_id: "EVAL: registry['uom'].id"
+          uom_po_id: "EVAL: registry['uom'].id"
+
+      - step: "Create batch"
+        action: "create"
+        model: "batch_toll_manufacturing_order"
+        save_as: "batch"
+        as_user: "base.user_admin"
+        values:
+          type_id: "EVAL: registry['order_type'].id"
+          partner_id: "EVAL: registry['partner'].id"
+
+      - step: "Confirm batch"
+        action: "call"
+        target: "batch"
+        method: "action_confirm"
+        as_user: "base.user_admin"
+
+      - step: "Invalidate cache"
+        action: "call"
+        target: "batch"
+        method: "invalidate_cache"
+
+      - step: "Open batch"
+        action: "call"
+        target: "batch"
+        method: "action_approve_approval"
+        as_user: "base.user_admin"
+
+      - step: "Create TMO linked to batch"
+        action: "create"
+        model: "toll_manufacturing_order"
+        save_as: "order"
+        as_user: "base.user_admin"
+        values:
+          batch_id: "EVAL: registry['batch'].id"
+          type_id: "EVAL: registry['order_type'].id"
+          partner_id: "EVAL: registry['partner'].id"
+          product_id: "EVAL: registry['product'].id"
+          uom_id: "EVAL: registry['uom'].id"
+          uom_quantity: 100.0
+
+      - step: "Assert batch now has one order"
+        action: "assert"
+        target: "batch"
+        asserts:
+          order_ids:
+            type: "o2m"
+            check: "count"
+            expected_count: 1

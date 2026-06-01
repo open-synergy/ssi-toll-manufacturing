@@ -1,0 +1,67 @@
+scenarios:
+  - name: "Toll Manufacturing Order BOM - Create"
+    steps:
+      - step: "Create order BOM"
+        action: "create"
+        model: "toll_manufacturing_order_bom"
+        save_as: "order_bom"
+        values:
+          name: "Test TMO BOM"
+          code: "TMOB001"
+
+      - step: "Assert order BOM created"
+        action: "assert"
+        target: "order_bom"
+        asserts:
+          id:
+            type: "value"
+            operator: "is_truthy"
+          name:
+            type: "value"
+            expected: "Test TMO BOM"
+
+  - name: "Toll Manufacturing Order BOM - Edit Name"
+    steps:
+      - step: "Create order BOM"
+        action: "create"
+        model: "toll_manufacturing_order_bom"
+        save_as: "order_bom"
+        values:
+          name: "TMO BOM Edit Before"
+          code: "TMOB002"
+
+      - step: "Edit name"
+        action: "write"
+        target: "order_bom"
+        values:
+          name: "TMO BOM Edit After"
+
+      - step: "Assert name updated"
+        action: "assert"
+        target: "order_bom"
+        asserts:
+          name:
+            type: "value"
+            expected: "TMO BOM Edit After"
+
+  - name: "Toll Manufacturing Order BOM - Delete"
+    steps:
+      - step: "Create order BOM"
+        action: "create"
+        model: "toll_manufacturing_order_bom"
+        save_as: "order_bom"
+        values:
+          name: "TMO BOM Delete"
+          code: "TMOB003"
+
+      - step: "Delete order BOM"
+        action: "call"
+        target: "order_bom"
+        method: "unlink"
+
+      - step: "Verify deleted"
+        action: "search"
+        model: "toll_manufacturing_order_bom"
+        domain: [["code", "=", "TMOB003"]]
+        save_as: "result"
+        expect_count: 0

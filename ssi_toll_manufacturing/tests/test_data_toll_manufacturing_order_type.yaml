@@ -1,0 +1,70 @@
+scenarios:
+  - name: "Toll Manufacturing Order Type - Create"
+    steps:
+      - step: "Create order type"
+        action: "create"
+        model: "toll_manufacturing_order_type"
+        save_as: "order_type"
+        values:
+          name: "Test TMO Type"
+          code: "TMT001"
+
+      - step: "Assert order type created"
+        action: "assert"
+        target: "order_type"
+        asserts:
+          id:
+            type: "value"
+            operator: "is_truthy"
+          name:
+            type: "value"
+            expected: "Test TMO Type"
+          code:
+            type: "value"
+            expected: "TMT001"
+
+  - name: "Toll Manufacturing Order Type - Edit Name"
+    steps:
+      - step: "Create order type"
+        action: "create"
+        model: "toll_manufacturing_order_type"
+        save_as: "order_type"
+        values:
+          name: "TMO Type Edit Before"
+          code: "TMT002"
+
+      - step: "Edit name"
+        action: "write"
+        target: "order_type"
+        values:
+          name: "TMO Type Edit After"
+
+      - step: "Assert name updated"
+        action: "assert"
+        target: "order_type"
+        asserts:
+          name:
+            type: "value"
+            expected: "TMO Type Edit After"
+
+  - name: "Toll Manufacturing Order Type - Delete"
+    steps:
+      - step: "Create order type"
+        action: "create"
+        model: "toll_manufacturing_order_type"
+        save_as: "order_type"
+        values:
+          name: "TMO Type Delete"
+          code: "TMT003"
+
+      - step: "Delete order type"
+        action: "call"
+        target: "order_type"
+        method: "unlink"
+
+      - step: "Verify deleted"
+        action: "search"
+        model: "toll_manufacturing_order_type"
+        domain: [["code", "=", "TMT003"]]
+        save_as: "result"
+        expect_count: 0

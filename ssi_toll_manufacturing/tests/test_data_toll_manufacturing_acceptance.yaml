@@ -1,0 +1,325 @@
+scenarios:
+  - name: "Toll Manufacturing Acceptance - Full Workflow draft to done"
+    steps:
+      - step: "Setup - create order type"
+        action: "create"
+        model: "toll_manufacturing_order_type"
+        save_as: "order_type"
+        values:
+          name: "TMA Test Type WF"
+          code: "TMATWF"
+
+      - step: "Setup - create partner"
+        action: "create"
+        model: "res.partner"
+        save_as: "partner"
+        values:
+          name: "Test TMA Partner WF"
+
+      - step: "Setup - get UoM unit"
+        action: "ref"
+        xml_id: "uom.product_uom_unit"
+        save_as: "uom"
+
+      - step: "Setup - create product"
+        action: "create"
+        model: "product.product"
+        save_as: "product"
+        values:
+          name: "Test TMA FG Product WF"
+          type: "product"
+          uom_id: "EVAL: registry['uom'].id"
+          uom_po_id: "EVAL: registry['uom'].id"
+
+      - step: "Setup - create batch toll manufacturing order"
+        action: "create"
+        model: "batch_toll_manufacturing_order"
+        save_as: "batch_order"
+        as_user: "base.user_admin"
+        values:
+          type_id: "EVAL: registry['order_type'].id"
+          partner_id: "EVAL: registry['partner'].id"
+
+      - step: "Setup - confirm batch order"
+        action: "call"
+        target: "batch_order"
+        method: "action_confirm"
+        as_user: "base.user_admin"
+
+      - step: "Setup - invalidate cache batch order"
+        action: "call"
+        target: "batch_order"
+        method: "invalidate_cache"
+
+      - step: "Setup - open batch order"
+        action: "call"
+        target: "batch_order"
+        method: "action_approve_approval"
+        as_user: "base.user_admin"
+
+      - step: "Setup - create toll manufacturing order"
+        action: "create"
+        model: "toll_manufacturing_order"
+        save_as: "tmo"
+        as_user: "base.user_admin"
+        values:
+          batch_id: "EVAL: registry['batch_order'].id"
+          type_id: "EVAL: registry['order_type'].id"
+          partner_id: "EVAL: registry['partner'].id"
+          product_id: "EVAL: registry['product'].id"
+          uom_id: "EVAL: registry['uom'].id"
+          uom_quantity: 100.0
+
+      - step: "Setup - confirm toll manufacturing order"
+        action: "call"
+        target: "tmo"
+        method: "action_confirm"
+        as_user: "base.user_admin"
+
+      - step: "Setup - invalidate cache tmo"
+        action: "call"
+        target: "tmo"
+        method: "invalidate_cache"
+
+      - step: "Setup - open toll manufacturing order"
+        action: "call"
+        target: "tmo"
+        method: "action_approve_approval"
+        as_user: "base.user_admin"
+
+      - step: "Setup - create batch toll manufacturing acceptance"
+        action: "create"
+        model: "batch_toll_manufacturing_acceptance"
+        save_as: "batch_acceptance"
+        as_user: "base.user_admin"
+        values:
+          batch_id: "EVAL: registry['batch_order'].id"
+          partner_id: "EVAL: registry['partner'].id"
+
+      - step: "Setup - confirm batch acceptance"
+        action: "call"
+        target: "batch_acceptance"
+        method: "action_confirm"
+        as_user: "base.user_admin"
+
+      - step: "Setup - invalidate cache batch acceptance"
+        action: "call"
+        target: "batch_acceptance"
+        method: "invalidate_cache"
+
+      - step: "Setup - open batch acceptance"
+        action: "call"
+        target: "batch_acceptance"
+        method: "action_approve_approval"
+        as_user: "base.user_admin"
+
+      - step: "Setup - get warehouse"
+        action: "ref"
+        xml_id: "stock.warehouse0"
+        save_as: "warehouse"
+
+      - step: "Setup - get stock location"
+        action: "ref"
+        xml_id: "stock.stock_location_stock"
+        save_as: "stock_location"
+
+      - step: "Setup - get any route"
+        action: "search"
+        model: "stock.location.route"
+        domain: []
+        save_as: "route"
+        limit: 1
+        order: "id asc"
+
+      - step: "Create toll manufacturing acceptance"
+        action: "create"
+        model: "toll_manufacturing_acceptance"
+        save_as: "acceptance"
+        as_user: "base.user_admin"
+        values:
+          batch_acceptance_id: "EVAL: registry['batch_acceptance'].id"
+          order_id: "EVAL: registry['tmo'].id"
+          partner_id: "EVAL: registry['partner'].id"
+          quantity: 50.0
+          warehouse_id: "EVAL: registry['warehouse'].id"
+          location_id: "EVAL: registry['stock_location'].id"
+          destination_location_id: "EVAL: registry['stock_location'].id"
+          raw_material_route_id: "EVAL: registry['route'].id"
+          finished_product_route_id: "EVAL: registry['route'].id"
+
+      - step: "Assert acceptance created in draft"
+        action: "assert"
+        target: "acceptance"
+        asserts:
+          state:
+            type: "value"
+            expected: "draft"
+          amount_total:
+            type: "value"
+            expected: 0.0
+          qty_received:
+            type: "value"
+            expected: 0.0
+
+      - step: "Open acceptance - creates procurement group"
+        action: "call"
+        target: "acceptance"
+        method: "action_open"
+        as_user: "base.user_admin"
+        asserts:
+          state:
+            type: "value"
+            expected: "open"
+
+      - step: "Invalidate cache after open"
+        action: "call"
+        target: "acceptance"
+        method: "invalidate_cache"
+
+      - step: "Assert procurement group created"
+        action: "assert"
+        target: "acceptance"
+        asserts:
+          procurement_group_id:
+            type: "value"
+            operator: "is_truthy"
+
+      - step: "Load supplier procured raw materials"
+        action: "call"
+        target: "acceptance"
+        method: "action_load_supplier_procured_raw_material"
+        as_user: "base.user_admin"
+
+      - step: "Load processing fees"
+        action: "call"
+        target: "acceptance"
+        method: "action_load_processing_fee"
+        as_user: "base.user_admin"
+
+      - step: "Load customer supplied raw materials"
+        action: "call"
+        target: "acceptance"
+        method: "action_load_customer_supplied_raw_material"
+        as_user: "base.user_admin"
+
+      - step: "Confirm acceptance"
+        action: "call"
+        target: "acceptance"
+        method: "action_confirm"
+        as_user: "base.user_admin"
+        asserts:
+          state:
+            type: "value"
+            expected: "confirm"
+
+      - step: "Invalidate cache after confirm"
+        action: "call"
+        target: "acceptance"
+        method: "invalidate_cache"
+
+      - step: "Approve acceptance to done"
+        action: "call"
+        target: "acceptance"
+        method: "action_approve_approval"
+        as_user: "base.user_admin"
+        asserts:
+          state:
+            type: "value"
+            expected: "done"
+
+  - name: "Batch Toll Manufacturing Acceptance - Full Workflow draft to open"
+    steps:
+      - step: "Setup - create order type"
+        action: "create"
+        model: "toll_manufacturing_order_type"
+        save_as: "order_type"
+        values:
+          name: "Batch TMA Compute Type"
+          code: "BTMACOMP"
+
+      - step: "Setup - create partner"
+        action: "create"
+        model: "res.partner"
+        save_as: "partner"
+        values:
+          name: "Test Batch TMA Compute Partner"
+
+      - step: "Create batch TMO"
+        action: "create"
+        model: "batch_toll_manufacturing_order"
+        save_as: "batch_order"
+        as_user: "base.user_admin"
+        values:
+          type_id: "EVAL: registry['order_type'].id"
+          partner_id: "EVAL: registry['partner'].id"
+
+      - step: "Confirm batch TMO"
+        action: "call"
+        target: "batch_order"
+        method: "action_confirm"
+        as_user: "base.user_admin"
+
+      - step: "Invalidate cache batch TMO"
+        action: "call"
+        target: "batch_order"
+        method: "invalidate_cache"
+
+      - step: "Open batch TMO"
+        action: "call"
+        target: "batch_order"
+        method: "action_approve_approval"
+        as_user: "base.user_admin"
+
+      - step: "Create batch acceptance"
+        action: "create"
+        model: "batch_toll_manufacturing_acceptance"
+        save_as: "batch_acceptance"
+        as_user: "base.user_admin"
+        values:
+          batch_id: "EVAL: registry['batch_order'].id"
+          partner_id: "EVAL: registry['partner'].id"
+
+      - step: "Assert batch acceptance amounts are zero"
+        action: "assert"
+        target: "batch_acceptance"
+        asserts:
+          amount_total:
+            type: "value"
+            expected: 0.0
+          amount_untaxed:
+            type: "value"
+            expected: 0.0
+          amount_tax:
+            type: "value"
+            expected: 0.0
+          amount_processing_fee:
+            type: "value"
+            expected: 0.0
+          amount_supplier_procured_raw_material:
+            type: "value"
+            expected: 0.0
+
+      - step: "Confirm batch acceptance"
+        action: "call"
+        target: "batch_acceptance"
+        method: "action_confirm"
+        as_user: "base.user_admin"
+        asserts:
+          state:
+            type: "value"
+            expected: "confirm"
+
+      - step: "Invalidate cache batch acceptance"
+        action: "call"
+        target: "batch_acceptance"
+        method: "invalidate_cache"
+
+      - step: "Open batch acceptance"
+        action: "call"
+        target: "batch_acceptance"
+        method: "action_approve_approval"
+        as_user: "base.user_admin"
+        asserts:
+          state:
+            type: "value"
+            expected: "open"
