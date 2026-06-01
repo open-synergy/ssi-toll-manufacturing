@@ -6,7 +6,7 @@
     "name": "SSI Toll Manufacturing",
     "version": "14.0.1.0.0",
     "author": "OpenSynergy Indonesia, PT. Simetri Sinergi Indonesia",
-    "website": "https://github.com/open-synergy/ssi-toll-manufacturing",
+    "website": "https://simetri-sinergi.id",
     "license": "AGPL-3",
     "depends": [
         "ssi_master_data_mixin",
