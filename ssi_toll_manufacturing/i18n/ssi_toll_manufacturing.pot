@@ -1197,6 +1197,11 @@ msgid "Next Approvals"
 msgstr ""
 
 #. module: ssi_toll_manufacturing
+#: model:toll_manufacturing_order_type,name:ssi_toll_manufacturing.toll_manufacturing_order_type_normal
+msgid "Normal"
+msgstr ""
+
+#. module: ssi_toll_manufacturing
 #: model:ir.model.fields,field_description:ssi_toll_manufacturing.field_batch_toll_manufacturing_acceptance__note
 #: model:ir.model.fields,field_description:ssi_toll_manufacturing.field_batch_toll_manufacturing_order__note
 #: model:ir.model.fields,field_description:ssi_toll_manufacturing.field_toll_manufacturing_acceptance__note
