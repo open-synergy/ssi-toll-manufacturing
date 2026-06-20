@@ -418,6 +418,11 @@ msgid "Batch Orders"
 msgstr ""
 
 #. module: ssi_toll_manufacturing
+#: model_terms:ir.ui.view,arch_db:ssi_toll_manufacturing.batch_toll_manufacturing_acceptance_view_search
+msgid "Batch TMO"
+msgstr ""
+
+#. module: ssi_toll_manufacturing
 #: model:ir.model.fields,help:ssi_toll_manufacturing.field_toll_manufacturing_acceptance__batch_acceptance_id
 msgid ""
 "Batch Toll Manufacturing Acceptance related to this Toll Manufacturing "
@@ -726,6 +731,10 @@ msgstr ""
 #: model:ir.model.fields,field_description:ssi_toll_manufacturing.field_batch_toll_manufacturing_order__date
 #: model:ir.model.fields,field_description:ssi_toll_manufacturing.field_toll_manufacturing_acceptance__date
 #: model:ir.model.fields,field_description:ssi_toll_manufacturing.field_toll_manufacturing_order__date
+#: model_terms:ir.ui.view,arch_db:ssi_toll_manufacturing.batch_toll_manufacturing_acceptance_view_search
+#: model_terms:ir.ui.view,arch_db:ssi_toll_manufacturing.batch_toll_manufacturing_order_view_search
+#: model_terms:ir.ui.view,arch_db:ssi_toll_manufacturing.toll_manufacturing_acceptance_view_search
+#: model_terms:ir.ui.view,arch_db:ssi_toll_manufacturing.toll_manufacturing_order_view_search
 msgid "Date"
 msgstr ""
 
@@ -855,6 +864,14 @@ msgstr ""
 #: model:ir.model.fields,help:ssi_toll_manufacturing.field_toll_manufacturing_order_bom__activity_type_icon
 #: model:ir.model.fields,help:ssi_toll_manufacturing.field_toll_manufacturing_order_type__activity_type_icon
 msgid "Font awesome icon e.g. fa-tasks"
+msgstr ""
+
+#. module: ssi_toll_manufacturing
+#: model_terms:ir.ui.view,arch_db:ssi_toll_manufacturing.batch_toll_manufacturing_acceptance_view_search
+#: model_terms:ir.ui.view,arch_db:ssi_toll_manufacturing.batch_toll_manufacturing_order_view_search
+#: model_terms:ir.ui.view,arch_db:ssi_toll_manufacturing.toll_manufacturing_acceptance_view_search
+#: model_terms:ir.ui.view,arch_db:ssi_toll_manufacturing.toll_manufacturing_order_view_search
+msgid "Group By"
 msgstr ""
 
 #. module: ssi_toll_manufacturing
@@ -1268,6 +1285,11 @@ msgid "Number of unread messages"
 msgstr ""
 
 #. module: ssi_toll_manufacturing
+#: model_terms:ir.ui.view,arch_db:ssi_toll_manufacturing.toll_manufacturing_acceptance_view_search
+msgid "Order"
+msgstr ""
+
+#. module: ssi_toll_manufacturing
 #: model:ir.ui.menu,name:ssi_toll_manufacturing.toll_manufacturing_order_menu
 #: model_terms:ir.ui.view,arch_db:ssi_toll_manufacturing.batch_toll_manufacturing_order_view_form
 msgid "Orders"
@@ -1278,6 +1300,10 @@ msgstr ""
 #: model:ir.model.fields,field_description:ssi_toll_manufacturing.field_batch_toll_manufacturing_order__partner_id
 #: model:ir.model.fields,field_description:ssi_toll_manufacturing.field_toll_manufacturing_acceptance__partner_id
 #: model:ir.model.fields,field_description:ssi_toll_manufacturing.field_toll_manufacturing_order__partner_id
+#: model_terms:ir.ui.view,arch_db:ssi_toll_manufacturing.batch_toll_manufacturing_acceptance_view_search
+#: model_terms:ir.ui.view,arch_db:ssi_toll_manufacturing.batch_toll_manufacturing_order_view_search
+#: model_terms:ir.ui.view,arch_db:ssi_toll_manufacturing.toll_manufacturing_acceptance_view_search
+#: model_terms:ir.ui.view,arch_db:ssi_toll_manufacturing.toll_manufacturing_order_view_search
 msgid "Partner"
 msgstr ""
 
@@ -1476,6 +1502,8 @@ msgstr ""
 #: model:ir.model.fields,field_description:ssi_toll_manufacturing.field_toll_manufacturing_order_customer_supplied_raw_material__product_id
 #: model:ir.model.fields,field_description:ssi_toll_manufacturing.field_toll_manufacturing_order_processing_fee__product_id
 #: model:ir.model.fields,field_description:ssi_toll_manufacturing.field_toll_manufacturing_order_supplier_procured_raw_material__product_id
+#: model_terms:ir.ui.view,arch_db:ssi_toll_manufacturing.toll_manufacturing_acceptance_view_search
+#: model_terms:ir.ui.view,arch_db:ssi_toll_manufacturing.toll_manufacturing_order_view_search
 msgid "Product"
 msgstr ""
 
@@ -2024,6 +2052,8 @@ msgstr ""
 #. module: ssi_toll_manufacturing
 #: model:ir.model.fields,field_description:ssi_toll_manufacturing.field_batch_toll_manufacturing_order__type_id
 #: model:ir.model.fields,field_description:ssi_toll_manufacturing.field_toll_manufacturing_order__type_id
+#: model_terms:ir.ui.view,arch_db:ssi_toll_manufacturing.batch_toll_manufacturing_order_view_search
+#: model_terms:ir.ui.view,arch_db:ssi_toll_manufacturing.toll_manufacturing_order_view_search
 msgid "Type"
 msgstr ""
 
