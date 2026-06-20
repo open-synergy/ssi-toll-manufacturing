@@ -4,7 +4,7 @@
 
 {
     "name": "SSI Toll Manufacturing",
-    "version": "14.0.1.1.0",
+    "version": "14.0.1.2.0",
     "author": "OpenSynergy Indonesia, PT. Simetri Sinergi Indonesia",
     "website": "https://simetri-sinergi.id",
     "license": "AGPL-3",

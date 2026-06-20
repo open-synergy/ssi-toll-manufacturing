@@ -21,7 +21,7 @@ Available addons
 ----------------
 addon | version | maintainers | summary
 --- | --- | --- | ---
-[ssi_toll_manufacturing](ssi_toll_manufacturing/) | 14.0.1.1.0 |  | SSI Toll Manufacturing
+[ssi_toll_manufacturing](ssi_toll_manufacturing/) | 14.0.1.2.0 |  | SSI Toll Manufacturing
 
 [//]: # (end addons)
 
