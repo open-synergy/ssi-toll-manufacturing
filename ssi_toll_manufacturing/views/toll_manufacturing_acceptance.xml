@@ -13,6 +13,36 @@
         <field name="mode">primary</field>
         <field name="arch" type="xml">
             <data>
+                <xpath expr="//search" position="inside">
+                    <field name="date" />
+                    <field name="order_id" />
+                    <field name="batch_acceptance_id" />
+                    <field name="partner_id" />
+                    <field name="product_id" />
+                    <separator />
+                    <group string="Group By">
+                        <filter
+                            name="grp_date"
+                            string="Date"
+                            context="{'group_by': 'date'}"
+                        />
+                        <filter
+                            name="grp_partner_id"
+                            string="Partner"
+                            context="{'group_by': 'partner_id'}"
+                        />
+                        <filter
+                            name="grp_product_id"
+                            string="Product"
+                            context="{'group_by': 'product_id'}"
+                        />
+                        <filter
+                            name="grp_order_id"
+                            string="Order"
+                            context="{'group_by': 'order_id'}"
+                        />
+                    </group>
+                </xpath>
             </data>
         </field>
     </record>
